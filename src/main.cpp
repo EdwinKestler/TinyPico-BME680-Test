@@ -49,18 +49,18 @@ void loop(void)
   unsigned long time_trigger = millis();
   if (iaqSensor.run())
   { // If new data is available
-    output = String(time_trigger);
-    output += ", " + String(iaqSensor.rawTemperature);
-    output += ", " + String(iaqSensor.pressure);
-    output += ", " + String(iaqSensor.rawHumidity);
-    output += ", " + String(iaqSensor.gasResistance);
-    output += ", " + String(iaqSensor.iaq);
-    output += ", " + String(iaqSensor.iaqAccuracy);
-    output += ", " + String(iaqSensor.temperature);
-    output += ", " + String(iaqSensor.humidity);
-    output += ", " + String(iaqSensor.staticIaq);
-    output += ", " + String(iaqSensor.co2Equivalent);
-    output += ", " + String(iaqSensor.breathVocEquivalent);
+    output = String(time_trigger) + "[ms]";
+    output += ", " + String(iaqSensor.rawTemperature) + "[°C]";
+    output += ", " + String(iaqSensor.pressure) + "[hPa]";
+    output += ", " + String(iaqSensor.rawHumidity) + "[%]";
+    output += ", " + String(iaqSensor.gasResistance) + "[Ohm]";
+    output += ", " + String(iaqSensor.iaq) + "[IAQ]";
+    output += ", " + String(iaqSensor.iaqAccuracy) + "[IAQ accuracy]";
+    output += ", " + String(iaqSensor.temperature) + "[°C]";
+    output += ", " + String(iaqSensor.humidity) + "[%]";
+    output += ", " + String(iaqSensor.staticIaq) + "[ Static IAQ]";
+    output += ", " + String(iaqSensor.co2Equivalent) + "[CO2 equivalent]";
+    output += ", " + String(iaqSensor.breathVocEquivalent) + "[breath VOC equivalent]";
     Serial.println(output);
   }
   else
