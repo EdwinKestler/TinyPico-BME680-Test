@@ -1,6 +1,40 @@
+/*
+/Este es un skectch para transmitir la data de un sensor de calidad de AIRE AIQ a un servicio de MQTT en internet 
+/debe tomarse en cuenta que deben agregarse la libreria libalgobsec.a en el directorio lib para lograr el funcionamiento 
+/de la libreri incluida por el fabricante BOSCH adicionamente debe modificarse el archivo platform.ini e incluir la opcion
+/build_flags = -Llib/ -lalgobsec para un correcto funcionamiento del mismo, el sensot debe quemarse durante 24 horas luego de 
+/ser encendido por primer vez para lograr una esabilidad en la medicion del VOC  y luego no debra encenderse por mas de 15 minutos 
+/para no perder la calibracion del mismo en un corto tiempo, se recomeinda mediciones consecuticvas de un minuto en intervalos de 10 minutos
+/de forma optima para preservar el sensor en un estado optimo por un periodo de un año. 
+/
+*/
+//--------Incluir Librerias para el funcionamienot del sensor BME680 de BOSCH
 #include <Arduino.h>
 #include <bsec.h>
 #include <Wire.h>
+//--------Incluir librerias para almacenar los ultimos datos leidos como un Json -------
+#include <FS.h>                                         //Manejo de sistema de archivos JSON
+#include <ArduinoJson.h>                                //serializacion y desearilizacion de docuemntos
+#include <SPIFFS.h>
+//--------Incluir Librerias para la sinronizacion de hora por medio de servicios de NTP
+#include <NTPClient.h>                                  //Liberia de manejode consulta de hora en intenet
+#include <WiFi.h>                                       // for WiFi shield
+#include <WiFiUdp.h>                                    //Libreria para el manejo de paquetes UDP sobre Wifi
+//-------------------------Estrcuturas (struct)-----------------------------------------------------------
+#include "prgm_struct.h"                                //Libreria con variables de configuracion
+
+/*-----------------------------------------------------Defeniciones-----------------------------------------------------------*/
+const char *JsonConfigurefileName = "/SetupConfig.json"; //Archivo JSON de configuracion
+const char *JsonDatafileName = "/BME680data.json";      //Archivo JSON de configuracion
+/*-----------------------------------------------------Variables--------------------------------------------------------------*/
+WiFiUDP ntpUDP;
+WConfig Wificonfig;                                     //Cliente UDP para Wifi
+NTPConfig NTPConnection;
+
+// You can specify the time server pool and the offset (in seconds, can be
+// changed later with setTimeOffset() ). Additionaly you can specify the
+// update interval (in milliseconds, can be changed using setUpdateInterval() ).
+NTPClient timeClient(ntpUDP, NTP_Server, NTPConnection.NTP_port, NTPConnection.NTP_interval);
 
 // Helper functions declarations
 void checkIaqSensorStatus(void);
